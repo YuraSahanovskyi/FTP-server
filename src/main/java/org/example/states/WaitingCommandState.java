@@ -14,7 +14,6 @@ public class WaitingCommandState implements ConnectionState {
         this.context = context;
     }
 
-
     protected void handlePASV() throws IOException {
         if (context.getDataServerSocket() != null) {
             context.getDataServerSocket().close();
@@ -38,53 +37,7 @@ public class WaitingCommandState implements ConnectionState {
         context.setDataSocket(new Socket(ip, port));
         context.getOut().println("200 Command okay.");
     }
-    private void receiveFile(String filename) {
-        try {
-            context.getOut().println("150 Opening data connection for " + filename);
-            BufferedInputStream dataIn = new BufferedInputStream(context.getDataSocket().getInputStream());
-            FileOutputStream fileOut = new FileOutputStream(new File(context.getCurrentDirectory(), filename));
 
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = dataIn.read(buffer)) != -1) {
-                fileOut.write(buffer, 0, bytesRead);
-            }
-
-            fileOut.close();
-            context.getDataSocket().close();
-            context.getOut().println("226 Transfer complete.");
-        } catch (IOException e) {
-            context.getOut().println("550 Failed to receive file.");
-        }
-    }
-
-    private void sendFile(String filename) {
-        try {
-            File file = new File(context.getCurrentDirectory(), filename);
-            if (!file.exists() || file.isDirectory()) {
-                context.getOut().println("550 File not found.");
-                return;
-            }
-
-            context.getOut().println("150 Opening data connection for " + filename);
-            BufferedOutputStream dataOut = new BufferedOutputStream(context.getDataSocket().getOutputStream());
-            FileInputStream fileIn = new FileInputStream(file);
-
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = fileIn.read(buffer)) != -1) {
-                dataOut.write(buffer, 0, bytesRead);
-            }
-
-            dataOut.flush();
-            dataOut.close();
-            fileIn.close();
-            context.getDataSocket().close();
-            context.getOut().println("226 Transfer complete.");
-        } catch (IOException e) {
-            context.getOut().println("550 Failed to send file.");
-        }
-    }
     private void sendDirectoryListing() throws IOException {
         File dir = new File(context.getCurrentDirectory());
         File[] files = dir.listFiles();
@@ -133,18 +86,12 @@ public class WaitingCommandState implements ConnectionState {
             case "PORT":
                 handlePORT(line);
                 break;
-            case "STOR":
+            case "STOR", "RETR":
                 if (context.getDataSocket() == null) {
                     context.getOut().println("425 Use PASV or PORT first.");
                 } else {
-                    receiveFile(line.substring(5).trim());
-                }
-                break;
-            case "RETR":
-                if (context.getDataSocket() == null) {
-                    context.getOut().println("425 Use PASV or PORT first.");
-                } else {
-                    sendFile(line.substring(5).trim());
+                    context.setState(new FileTransferState(context));
+                    context.handleCommand(line);
                 }
                 break;
             case "QUIT":
