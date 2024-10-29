@@ -2,6 +2,6 @@ package org.example.states;
 
 import java.io.IOException;
 
-public interface ConnectionState {
+interface ConnectionState {
     void handleCommand(String line) throws IOException;
 }

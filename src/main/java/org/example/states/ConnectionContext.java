@@ -43,7 +43,7 @@ public class ConnectionContext {
         return in;
     }
 
-    public String getCurrentDirectory() {
+    String getCurrentDirectory() {
         return currentDirectory;
     }
 
@@ -51,19 +51,19 @@ public class ConnectionContext {
         this.currentDirectory = currentDirectory;
     }
 
-    public ServerSocket getDataServerSocket() {
+    ServerSocket getDataServerSocket() {
         return dataServerSocket;
     }
 
-    public void setDataServerSocket(ServerSocket dataServerSocket) {
+    void setDataServerSocket(ServerSocket dataServerSocket) {
         this.dataServerSocket = dataServerSocket;
     }
 
-    public Socket getDataSocket() {
+    Socket getDataSocket() {
         return dataSocket;
     }
 
-    public void setDataSocket(Socket dataSocket) {
+    void setDataSocket(Socket dataSocket) {
         this.dataSocket = dataSocket;
     }
 

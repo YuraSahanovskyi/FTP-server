@@ -3,7 +3,7 @@ package org.example.states;
 import org.example.Authenticator;
 import java.io.IOException;
 
-public class UnauthenticatedState implements ConnectionState {
+class UnauthenticatedState implements ConnectionState {
     private final ConnectionContext context;
     private final Authenticator authenticator;
     public UnauthenticatedState(ConnectionContext context) {

@@ -3,13 +3,13 @@ package org.example.states;
 import java.io.*;
 
 
-public class FileTransferState implements ConnectionState {
+class FileTransferState implements ConnectionState {
     private final ConnectionContext context;
     public FileTransferState(ConnectionContext context) {
         this.context = context;
     }
     @Override
-    public void handleCommand(String line) throws IOException {
+    public void handleCommand(String line) {
         String command = line.split(" ")[0].toUpperCase();
         switch (command) {
             case "STOR":

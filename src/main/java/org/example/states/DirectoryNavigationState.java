@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class DirectoryNavigationState implements ConnectionState{
+class DirectoryNavigationState implements ConnectionState{
     private final ConnectionContext context;
     public DirectoryNavigationState(ConnectionContext context) {
         this.context = context;

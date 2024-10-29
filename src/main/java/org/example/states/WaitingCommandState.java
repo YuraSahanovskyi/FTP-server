@@ -4,14 +4,14 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class WaitingCommandState implements ConnectionState {
-    protected ConnectionContext context;
+class WaitingCommandState implements ConnectionState {
+    private final ConnectionContext context;
 
     public WaitingCommandState(ConnectionContext context) {
         this.context = context;
     }
 
-    protected void handlePASV() throws IOException {
+    private void handlePASV() throws IOException {
         if (context.getDataServerSocket() != null) {
             context.getDataServerSocket().close();
         }
@@ -24,7 +24,7 @@ public class WaitingCommandState implements ConnectionState {
         context.setDataSocket(context.getDataServerSocket().accept());
     }
 
-    protected void handlePORT(String line) throws IOException {
+    private void handlePORT(String line) throws IOException {
         if (context.getDataSocket() != null) {
             context.getDataSocket().close();
         }
