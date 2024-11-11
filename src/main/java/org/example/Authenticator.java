@@ -12,7 +12,7 @@ public class Authenticator {
     }
 
     private boolean authenticate(String username, String password) {
-        return userRepository.contains(username) && userRepository.getPassword(username).equals(password);
+        return userRepository.isExists(username) && userRepository.getPassword(username).equals(password);
     }
 
     public boolean authenticate(String line, BufferedReader in, PrintWriter out) throws IOException {
