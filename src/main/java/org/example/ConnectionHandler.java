@@ -1,11 +1,9 @@
 package org.example;
 
 import org.example.states.ConnectionContext;
-
-import java.io.BufferedReader;
+import org.example.states.ConnectionContextBuilder;
+import org.example.states.Director;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ConnectionHandler implements Runnable {
@@ -19,17 +17,11 @@ public class ConnectionHandler implements Runnable {
     @Override
     public void run() {
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-
-            out.println("220 Welcome to Simple FTP Server");
-
-            connectionContext = new ConnectionContext(clientSocket, in, out, System.getProperty("user.dir"));
-            String line;
-            while ((line = in.readLine()) != null) {
-                System.out.println("Received: " + line);
-                connectionContext.handleCommand(line);
-            }
+            ConnectionContextBuilder builder = new ConnectionContextBuilder();
+            Director director = new Director();
+            director.buildConnectionContext(builder, clientSocket);
+            connectionContext = builder.build();
+            connectionContext.start();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

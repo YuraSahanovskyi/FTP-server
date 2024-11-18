@@ -23,6 +23,15 @@ public class ConnectionContext {
         this.state = new UnauthenticatedState(this);
     }
 
+    public void start() throws IOException {
+        out.println("220 Welcome to Simple FTP Server");
+        String line;
+        while ((line = in.readLine()) != null) {
+            System.out.println("Received: " + line);
+            handleCommand(line);
+        }
+    }
+
     public void handleCommand(String line) throws IOException {
         this.state.handleCommand(line);
     }
