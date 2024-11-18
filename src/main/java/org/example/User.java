@@ -1,5 +1,6 @@
-package org.example.builder;
+package org.example;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -12,6 +13,35 @@ public class User {
         this.username = username;
         this.password = password;
         this.permissions = permissions;
+    }
+
+    public static class Builder {
+        private String username;
+        private String password;
+        private Set<Permission> permissions;
+
+        public Builder withUsername(String username) {
+            this.username = username;
+            return this;
+        }
+        public Builder withPassword(String password) {
+            this.password = password;
+            return this;
+        }
+        public Builder withPermission(Permission permission) {
+            if (this.permissions == null) {
+                this.permissions = new HashSet<>();
+            }
+            this.permissions.add(permission);
+            return this;
+        }
+        public User build() {
+            return new User(username, password, permissions);
+        }
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public String getUsername() {

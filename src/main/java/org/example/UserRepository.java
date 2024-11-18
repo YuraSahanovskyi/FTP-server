@@ -1,9 +1,5 @@
 package org.example;
 
-import org.example.builder.PermissionBuilder;
-import org.example.builder.User;
-import org.example.builder.UserBuilder;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,16 +8,13 @@ public class UserRepository {
 
     public UserRepository() {
         // Predefined users
-        UserBuilder userBuilder = new UserBuilder();
-        PermissionBuilder permissionBuilder = new PermissionBuilder();
         String[] usernames = {"user1", "user2", "user3", "user4", "user5"};
         String[] passwords = {"password1", "password2", "password3", "password4", "password5"};
         for (int i = 0; i < usernames.length; i++) {
-            userBuilder.reset();
-            users.add(userBuilder
-                    .setUsername(usernames[i])
-                    .setPassword(passwords[i])
-                    .build());
+            users.add(User.builder()
+                            .withUsername(usernames[i])
+                            .withPassword(passwords[i])
+                            .build());
         }
     }
 

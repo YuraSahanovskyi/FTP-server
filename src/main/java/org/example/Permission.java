@@ -1,4 +1,4 @@
-package org.example.builder;
+package org.example;
 
 import java.util.Objects;
 
