@@ -1,5 +1,6 @@
 package org.example.states;
 
+import org.example.AuthenticatedUser;
 import org.example.Authenticator;
 import java.io.IOException;
 
@@ -12,7 +13,9 @@ class UnauthenticatedState implements ConnectionState {
     }
     @Override
     public void handleCommand(String line) throws IOException {
-        if (authenticator.authenticate(line, context.getIn(), context.getOut())) {
+        AuthenticatedUser authenticatedUser = authenticator.authenticate(line, context.getIn(), context.getOut());
+        if (authenticatedUser != null) {
+            context.setUser(authenticatedUser);
             context.setState(new WaitingCommandState(context));
         }
     }

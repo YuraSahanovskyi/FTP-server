@@ -8,5 +8,4 @@ public interface Builder {
     void setClientSocket(Socket clientSocket);
     void setBufferedReader(BufferedReader bufferedReader);
     void setPrintWriter(PrintWriter printWriter);
-    void setCurrentDirectory(String currentDirectory);
 }

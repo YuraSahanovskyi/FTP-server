@@ -15,7 +15,7 @@ public class Authenticator {
         return userRepository.isExists(username) && userRepository.getPassword(username).equals(password);
     }
 
-    public boolean authenticate(String line, BufferedReader in, PrintWriter out) throws IOException {
+    public AuthenticatedUser authenticate(String line, BufferedReader in, PrintWriter out) throws IOException {
         if (line.startsWith("USER")) {
             String username = line.split(" ")[1];
             out.println("331 Username okay, need password");
@@ -25,15 +25,15 @@ public class Authenticator {
                 String password = line.split(" ")[1];
                 if (this.authenticate(username, password)) {
                     out.println("230 User logged in, proceed");
-                    return true;
+                    return new AuthenticatedUser(username, password, userRepository.getPermissions(username));
                 } else {
                     out.println("530 Not logged in");
-                    return false;
+                    return null;
                 }
             }
         } else {
             out.println("530 Not logged in");
         }
-        return false;
+        return null;
     }
 }

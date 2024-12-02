@@ -7,7 +7,6 @@ import java.net.Socket;
 public class ConnectionContextBuilder implements Builder {
     private  PrintWriter out;
     private  BufferedReader in;
-    private String currentDirectory;
     private  Socket clientSocket;
     @Override
     public void setClientSocket(Socket clientSocket) {
@@ -24,12 +23,7 @@ public class ConnectionContextBuilder implements Builder {
         this.out = printWriter;
     }
 
-    @Override
-    public void setCurrentDirectory(String currentDirectory) {
-        this.currentDirectory = currentDirectory;
-    }
-
     public ConnectionContext build() {
-        return new ConnectionContext(clientSocket, in, out, currentDirectory);
+        return new ConnectionContext(clientSocket, in, out);
     }
 }

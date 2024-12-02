@@ -13,6 +13,5 @@ public class Director {
         builder.setClientSocket(clientSocket);
         builder.setBufferedReader(in);
         builder.setPrintWriter(out);
-        builder.setCurrentDirectory(System.getProperty("user.dir"));
     }
 }

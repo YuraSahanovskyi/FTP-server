@@ -28,4 +28,11 @@ public class UserRepository {
                 .map(User::getPassword)
                 .orElse(null);
     }
+    public Set<Permission> getPermissions(String username) {
+        return users.stream()
+                .filter(user -> user.getUsername().equals(username))
+                .findFirst()
+                .map(User::getPermissions)
+                .orElse(new HashSet<>());
+    }
 }

@@ -1,5 +1,6 @@
 package org.example.states;
 
+import org.example.AuthenticatedUser;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,16 +11,15 @@ public class ConnectionContext {
     private ConnectionState state;
     private final PrintWriter out;
     private final BufferedReader in;
-    private String currentDirectory;
+    private AuthenticatedUser user;
     private ServerSocket dataServerSocket;
     private Socket dataSocket;
     private final Socket clientSocket;
 
-    public ConnectionContext(Socket clientSocket, BufferedReader in, PrintWriter out, String currentDirectory) {
+    public ConnectionContext(Socket clientSocket, BufferedReader in, PrintWriter out) {
         this.clientSocket = clientSocket;
         this.in = in;
         this.out = out;
-        this.currentDirectory = currentDirectory;
         this.state = new UnauthenticatedState(this);
     }
 
@@ -52,12 +52,20 @@ public class ConnectionContext {
         return in;
     }
 
+    AuthenticatedUser getUser() {
+        return user;
+    }
+
+    void setUser(AuthenticatedUser user) {
+        this.user = user;
+    }
+
     String getCurrentDirectory() {
-        return currentDirectory;
+        return user.getCurrentDirectory();
     }
 
     void setCurrentDirectory(String currentDirectory) {
-        this.currentDirectory = currentDirectory;
+        this.user.setCurrentDirectory(currentDirectory);
     }
 
     ServerSocket getDataServerSocket() {
