@@ -16,6 +16,7 @@ class UnauthenticatedState implements ConnectionState {
         AuthenticatedUser authenticatedUser = authenticator.authenticate(line, context.getIn(), context.getOut());
         if (authenticatedUser != null) {
             context.setUser(authenticatedUser);
+            context.restoreHistory();
             context.setState(new WaitingCommandState(context));
         }
     }

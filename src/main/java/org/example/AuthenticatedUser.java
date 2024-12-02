@@ -13,4 +13,20 @@ public class AuthenticatedUser extends User {
     public void setCurrentDirectory(String currentDirectory) {
         this.currentDirectory = currentDirectory;
     }
+    public static class CurrentDirectoryMemento {
+        private final String path;
+        public CurrentDirectoryMemento(String path) {
+            this.path = path;
+        }
+        public String getCurrentDirectory() {
+            return path;
+        }
+    }
+    public void restore(CurrentDirectoryMemento currentDirectoryMemento) {
+        this.currentDirectory = currentDirectoryMemento.path;
+    }
+    public CurrentDirectoryMemento save() {
+        return new CurrentDirectoryMemento(currentDirectory);
+    }
+
 }

@@ -39,6 +39,7 @@ class DirectoryNavigationState implements ConnectionState{
         Path newPath = Paths.get(context.getCurrentDirectory(), path).normalize();
         if (Files.exists(newPath) && Files.isDirectory(newPath)) {
             context.setCurrentDirectory(newPath.toString());
+            context.saveHistory();
             context.getOut().println("250 Directory successfully changed.");
         } else {
             context.getOut().println("550 Failed to change directory.");

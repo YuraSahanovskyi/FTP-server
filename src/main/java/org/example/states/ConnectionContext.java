@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ConnectionContext {
     private ConnectionState state;
@@ -15,6 +17,7 @@ public class ConnectionContext {
     private ServerSocket dataServerSocket;
     private Socket dataSocket;
     private final Socket clientSocket;
+    static Map<String, AuthenticatedUser.CurrentDirectoryMemento> history = new HashMap<>();
 
     public ConnectionContext(Socket clientSocket, BufferedReader in, PrintWriter out) {
         this.clientSocket = clientSocket;
@@ -94,6 +97,15 @@ public class ConnectionContext {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    void saveHistory() {
+        history.put(user.getUsername(), user.save());
+    }
+    void restoreHistory() {
+        AuthenticatedUser.CurrentDirectoryMemento currentDirectoryMemento = history.get(user.getUsername());
+        if (currentDirectoryMemento != null) {
+            user.restore(history.get(user.getUsername()));
         }
     }
 }
