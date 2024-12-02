@@ -1,6 +1,7 @@
 package org.example.connection.state;
 
 import org.example.authentication.AuthenticatedUser;
+import org.example.authentication.UserMemento;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class ConnectionContext {
     private ServerSocket dataServerSocket;
     private Socket dataSocket;
     private final Socket clientSocket;
-    static Map<String, AuthenticatedUser.CurrentDirectoryMemento> history = new HashMap<>();
+    static Map<String, UserMemento> history = new HashMap<>();
 
     public ConnectionContext(Socket clientSocket, BufferedReader in, PrintWriter out) {
         this.clientSocket = clientSocket;
@@ -104,8 +105,8 @@ public class ConnectionContext {
         history.put(user.getUsername(), user.save());
     }
     void restoreHistory() {
-        AuthenticatedUser.CurrentDirectoryMemento currentDirectoryMemento = history.get(user.getUsername());
-        if (currentDirectoryMemento != null) {
+        UserMemento userMemento = history.get(user.getUsername());
+        if (userMemento != null) {
             user.restore(history.get(user.getUsername()));
         }
     }

@@ -16,17 +16,14 @@ public class AuthenticatedUser extends User {
     public void setCurrentDirectory(String currentDirectory) {
         this.currentDirectory = currentDirectory;
     }
-    public static class CurrentDirectoryMemento {
+    public static class CurrentDirectoryMemento implements UserMemento {
         private final String path;
         public CurrentDirectoryMemento(String path) {
             this.path = path;
         }
-        public String getCurrentDirectory() {
-            return path;
-        }
     }
-    public void restore(CurrentDirectoryMemento currentDirectoryMemento) {
-        this.currentDirectory = currentDirectoryMemento.path;
+    public void restore(UserMemento userMemento) {
+        this.currentDirectory = ((CurrentDirectoryMemento) userMemento).path;
     }
     public CurrentDirectoryMemento save() {
         return new CurrentDirectoryMemento(currentDirectory);
