@@ -1,4 +1,4 @@
-package org.example.states;
+package org.example.connection.builder;
 
 import java.io.BufferedReader;
 import java.io.IOException;

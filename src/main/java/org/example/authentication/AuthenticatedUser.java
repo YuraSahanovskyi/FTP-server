@@ -1,4 +1,7 @@
-package org.example;
+package org.example.authentication;
+
+import org.example.user.Permission;
+import org.example.user.User;
 
 import java.util.Set;
 

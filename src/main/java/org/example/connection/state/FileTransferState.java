@@ -1,4 +1,4 @@
-package org.example.states;
+package org.example.connection.state;
 
 import java.io.*;
 

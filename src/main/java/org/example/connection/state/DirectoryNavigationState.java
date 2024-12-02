@@ -1,4 +1,4 @@
-package org.example.states;
+package org.example.connection.state;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-class DirectoryNavigationState implements ConnectionState{
+class DirectoryNavigationState implements ConnectionState {
     private final ConnectionContext context;
     public DirectoryNavigationState(ConnectionContext context) {
         this.context = context;

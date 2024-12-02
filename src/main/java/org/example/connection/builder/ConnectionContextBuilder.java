@@ -1,4 +1,6 @@
-package org.example.states;
+package org.example.connection.builder;
+
+import org.example.connection.state.ConnectionContext;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;

@@ -1,6 +1,7 @@
-package org.example.states;
+package org.example.connection.state;
 
-import org.example.AuthenticatedUser;
+import org.example.authentication.AuthenticatedUser;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;

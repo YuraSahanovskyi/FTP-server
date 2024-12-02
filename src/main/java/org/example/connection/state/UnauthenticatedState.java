@@ -1,7 +1,7 @@
-package org.example.states;
+package org.example.connection.state;
 
-import org.example.AuthenticatedUser;
-import org.example.Authenticator;
+import org.example.authentication.AuthenticatedUser;
+import org.example.authentication.Authenticator;
 import java.io.IOException;
 
 class UnauthenticatedState implements ConnectionState {

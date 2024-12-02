@@ -1,8 +1,8 @@
-package org.example;
+package org.example.connection;
 
-import org.example.states.ConnectionContext;
-import org.example.states.ConnectionContextBuilder;
-import org.example.states.Director;
+import org.example.connection.state.ConnectionContext;
+import org.example.connection.builder.ConnectionContextBuilder;
+import org.example.connection.builder.Director;
 import java.io.IOException;
 import java.net.Socket;
 

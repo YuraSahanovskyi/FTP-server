@@ -1,4 +1,6 @@
-package org.example;
+package org.example.authentication;
+
+import org.example.user.UserRepository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
