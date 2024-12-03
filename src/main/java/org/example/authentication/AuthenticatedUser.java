@@ -25,7 +25,7 @@ public class AuthenticatedUser extends User {
     public void restore(UserMemento userMemento) {
         this.currentDirectory = ((CurrentDirectoryMemento) userMemento).path;
     }
-    public CurrentDirectoryMemento save() {
+    public UserMemento save() {
         return new CurrentDirectoryMemento(currentDirectory);
     }
 
