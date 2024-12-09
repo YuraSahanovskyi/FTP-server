@@ -8,8 +8,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Main {
-    private static final int PORT = 2121;  // Using port 2121
-    private static final int THREAD_POOL_SIZE = 10;  // Number of threads in the pool
+    private static final int PORT = 2121;
+    private static final int THREAD_POOL_SIZE = 10;
 
     @SuppressWarnings("InfiniteLoopStatement")
     public static void main(String[] args) {

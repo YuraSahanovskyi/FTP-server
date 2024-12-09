@@ -15,12 +15,11 @@ class WaitingCommandState implements ConnectionState {
         if (context.getDataServerSocket() != null) {
             context.getDataServerSocket().close();
         }
-        context.setDataServerSocket(new ServerSocket(0));
+        context.setDataServerSocket(new ServerSocket(2020));
         int port = context.getDataServerSocket().getLocalPort();
-        String ip = context.getClientSocket().getLocalAddress().getHostAddress().replace('.', ',');
         int p1 = port / 256;
         int p2 = port % 256;
-        context.getOut().println("227 Entering Passive Mode (" + ip + "," + p1 + "," + p2 + ")");
+        context.getOut().println("227 Entering Passive Mode (127,0,0,1," + p1 + "," + p2 + ")");
         context.setDataSocket(context.getDataServerSocket().accept());
     }
 

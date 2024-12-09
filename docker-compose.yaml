@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    restart: always
+    ports:
+      - "2121:2121"
+      - "2020:2020"
+    volumes:
+      - ./data:/app/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
