@@ -41,51 +41,51 @@ public class ConnectionContext {
         this.state.handleCommand(line);
     }
 
-    void setState(ConnectionState state) {
+    public void setState(ConnectionState state) {
         this.state = state;
     }
 
-    Socket getClientSocket() {
+    public Socket getClientSocket() {
         return clientSocket;
     }
 
-    PrintWriter getOut() {
+    public PrintWriter getOut() {
         return out;
     }
 
-    BufferedReader getIn() {
+    public BufferedReader getIn() {
         return in;
     }
 
-    AuthenticatedUser getUser() {
+    public AuthenticatedUser getUser() {
         return user;
     }
 
-    void setUser(AuthenticatedUser user) {
+    public void setUser(AuthenticatedUser user) {
         this.user = user;
     }
 
-    String getCurrentDirectory() {
+    public String getCurrentDirectory() {
         return user.getCurrentDirectory();
     }
 
-    void setCurrentDirectory(String currentDirectory) {
+    public void setCurrentDirectory(String currentDirectory) {
         this.user.setCurrentDirectory(currentDirectory);
     }
 
-    ServerSocket getDataServerSocket() {
+    public ServerSocket getDataServerSocket() {
         return dataServerSocket;
     }
 
-    void setDataServerSocket(ServerSocket dataServerSocket) {
+    public void setDataServerSocket(ServerSocket dataServerSocket) {
         this.dataServerSocket = dataServerSocket;
     }
 
-    Socket getDataSocket() {
+    public Socket getDataSocket() {
         return dataSocket;
     }
 
-    void setDataSocket(Socket dataSocket) {
+    public void setDataSocket(Socket dataSocket) {
         this.dataSocket = dataSocket;
     }
 
@@ -101,10 +101,10 @@ public class ConnectionContext {
             e.printStackTrace();
         }
     }
-    void saveHistory() {
+    public void saveHistory() {
         history.put(user.getUsername(), user.save());
     }
-    void restoreHistory() {
+    public void restoreHistory() {
         UserMemento userMemento = history.get(user.getUsername());
         if (userMemento != null) {
             user.restore(history.get(user.getUsername()));
