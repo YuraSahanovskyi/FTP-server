@@ -1,6 +1,8 @@
 package org.example.connection.state;
 
-import org.example.authentication.AuthenticatedUser;
+import lombok.Getter;
+import lombok.Setter;
+import org.example.authentication.User;
 import org.example.authentication.UserMemento;
 
 import java.io.BufferedReader;
@@ -12,12 +14,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConnectionContext {
+    @Setter
     private ConnectionState state;
+    @Getter
     private final PrintWriter out;
+    @Getter
     private final BufferedReader in;
-    private AuthenticatedUser user;
+    @Setter
+    @Getter
+    private User user;
+    @Setter
+    @Getter
     private ServerSocket dataServerSocket;
+    @Setter
+    @Getter
     private Socket dataSocket;
+    @Getter
     private final Socket clientSocket;
     static Map<String, UserMemento> history = new HashMap<>();
 
@@ -41,52 +53,12 @@ public class ConnectionContext {
         this.state.handleCommand(line);
     }
 
-    public void setState(ConnectionState state) {
-        this.state = state;
-    }
-
-    public Socket getClientSocket() {
-        return clientSocket;
-    }
-
-    public PrintWriter getOut() {
-        return out;
-    }
-
-    public BufferedReader getIn() {
-        return in;
-    }
-
-    public AuthenticatedUser getUser() {
-        return user;
-    }
-
-    public void setUser(AuthenticatedUser user) {
-        this.user = user;
-    }
-
     public String getCurrentDirectory() {
         return user.getCurrentDirectory();
     }
 
     public void setCurrentDirectory(String currentDirectory) {
         this.user.setCurrentDirectory(currentDirectory);
-    }
-
-    public ServerSocket getDataServerSocket() {
-        return dataServerSocket;
-    }
-
-    public void setDataServerSocket(ServerSocket dataServerSocket) {
-        this.dataServerSocket = dataServerSocket;
-    }
-
-    public Socket getDataSocket() {
-        return dataSocket;
-    }
-
-    public void setDataSocket(Socket dataSocket) {
-        this.dataSocket = dataSocket;
     }
 
     public void closeDataSockets() {

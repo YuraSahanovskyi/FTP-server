@@ -21,12 +21,15 @@ services:
   database:
     image: postgres:latest
     restart: always
+    ports:
+      - "5432:5432"
     environment:
-      POSTGRES_DB: ftp_server
-      POSTGRES_USER: ftp_user
-      POSTGRES_PASSWORD: ftp_password
+      - POSTGRES_DB=ftp_server
+      - POSTGRES_USER=ftp_user
+      - POSTGRES_PASSWORD=ftp_password
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app-network
 

@@ -17,6 +17,7 @@ public class FileOperationsState implements ConnectionState {
         commandHandlers.put("PWD", new PwdCommandHandler(context));
         commandHandlers.put("CWD", new CwdCommandHandler(context));
         commandHandlers.put("LIST", new ListCommandHandler(context));
+        commandHandlers.put("MKD", new MkdCommandHandler(context));
     }
 
     @Override

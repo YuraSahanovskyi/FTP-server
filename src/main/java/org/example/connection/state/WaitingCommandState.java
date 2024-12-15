@@ -44,7 +44,7 @@ class WaitingCommandState implements ConnectionState {
             case "PORT":
                 handlePORT(line);
                 break;
-            case "PWD", "CWD", "LIST", "STOR", "RETR":
+            case "PWD", "CWD", "LIST", "STOR", "RETR", "MKD":
                 context.setState(new FileOperationsState(context));
                 context.handleCommand(line);
                 break;

@@ -1,23 +1,27 @@
 package org.example.authentication;
 
-import org.example.user.UserRepository;
+import org.example.authentication.database.UserRepository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 public class Authenticator {
-    private final UserRepository userRepository;
-
-    public Authenticator() {
-        this.userRepository = new UserRepository();
-    }
-
     private boolean isExists(String username, String password) {
-        return userRepository.isExists(username) && userRepository.getPassword(username).equals(password);
+        User user;
+        try {
+            user = UserRepository.getUserByUsername(username);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        if(user == null) {
+            return false;
+        }
+        return user.getPassword().equals(password);
     }
 
-    public AuthenticatedUser authenticate(String line, BufferedReader in, PrintWriter out) throws IOException {
+    public User authenticate(String line, BufferedReader in, PrintWriter out) throws IOException {
         if (line.startsWith("USER")) {
             String username = line.split(" ")[1];
             out.println("331 Username okay, need password");
@@ -27,7 +31,11 @@ public class Authenticator {
                 String password = line.split(" ")[1];
                 if (this.isExists(username, password)) {
                     out.println("230 User logged in, proceed");
-                    return new AuthenticatedUser(username, password, userRepository.getPermissions(username));
+                    try {
+                        return UserRepository.getUserByUsername(username);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
                 } else {
                     out.println("530 Not logged in");
                     return null;
