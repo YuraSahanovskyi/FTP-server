@@ -1,5 +1,6 @@
 package org.example.connection.state.handler;
 
+import org.example.authentication.Permission;
 import org.example.connection.state.ConnectionContext;
 
 import java.io.BufferedOutputStream;
@@ -18,7 +19,9 @@ public class RetrCommandHandler extends AbstractCommandHandler {
             context.getOut().println("425 Use PASV or PORT first.");
             return false;
         }
-        return true;
+        return context.getUser().getPermissions().stream()
+                .filter(p -> context.getCurrentDirectory().startsWith(p.getPath()))
+                .anyMatch(Permission::isRead);
     }
 
     @Override

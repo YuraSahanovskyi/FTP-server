@@ -1,5 +1,6 @@
 package org.example.connection.state.handler;
 
+import org.example.authentication.Permission;
 import org.example.connection.state.ConnectionContext;
 
 import java.io.BufferedWriter;
@@ -22,7 +23,9 @@ public class ListCommandHandler extends AbstractCommandHandler {
         }
         File dir = new File(context.getCurrentDirectory());
         files = dir.listFiles();
-        return files != null;
+        return files != null && context.getUser().getPermissions().stream()
+                .filter(p -> context.getCurrentDirectory().startsWith(p.getPath()))
+                .anyMatch(Permission::isRead);
     }
 
     @Override

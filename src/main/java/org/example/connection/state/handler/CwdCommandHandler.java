@@ -1,5 +1,6 @@
 package org.example.connection.state.handler;
 
+import org.example.authentication.Permission;
 import org.example.connection.state.ConnectionContext;
 
 import java.nio.file.Files;
@@ -17,8 +18,19 @@ public class CwdCommandHandler extends AbstractCommandHandler {
     @Override
     protected boolean preconditions(String line) {
         String path = line.substring(4).trim();
+        return canChangeDirectory(path);
+    }
+
+    private boolean canChangeDirectory(String path) {
         newPath = Paths.get(context.getCurrentDirectory(), path).normalize();
-        return Files.exists(newPath) && Files.isDirectory(newPath);
+
+        if (!Files.exists(newPath) || !Files.isDirectory(newPath)) {
+            return false;
+        }
+
+        return context.getUser().getPermissions().stream()
+                .filter(p -> newPath.startsWith(p.getPath()))
+                .anyMatch(Permission::isRead);
     }
 
     @Override

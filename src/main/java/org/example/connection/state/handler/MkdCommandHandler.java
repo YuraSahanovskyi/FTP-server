@@ -16,7 +16,7 @@ public class MkdCommandHandler extends AbstractCommandHandler {
         return !newDir.exists() && context.getUser()
                 .getPermissions().stream()
                 .filter(p -> context.getCurrentDirectory().startsWith(p.getPath()))
-                .anyMatch(Permission::isRead);
+                .anyMatch(Permission::isWrite);
     }
 
     @Override
