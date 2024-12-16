@@ -1,59 +1,56 @@
 package org.example.authentication.database;
 
+import org.example.authentication.Permission;
 import org.example.authentication.User;
 
 import java.sql.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserRepository {
-
-    // Метод для отримання користувача за username
     public static User getUserByUsername(String username) throws SQLException {
-        String sql = "SELECT id, username, password, working_dir, speed_limit FROM users WHERE username = ?";
+        String sql = "SELECT u.id, u.username, u.password, u.working_dir, u.speed_limit, " +
+                "p.id AS permission_id, p.path, p.read, p.write, p.execute " +
+                "FROM users u " +
+                "LEFT JOIN permissions p ON u.id = p.user_id " +
+                "WHERE u.username = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, username);
 
             try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return User.builder()
-                            .id(resultSet.getInt("id"))
-                            .username(resultSet.getString("username"))
-                            .password(resultSet.getString("password"))
-                            .speedLimit(resultSet.getInt("speed_limit"))
-                            .currentDirectory(resultSet.getString("working_dir"))
-                            .build();
-                } else {
-                    return null; // Користувач не знайдений
+                User user = null;
+                Set<Permission> permissions = new HashSet<>();
+
+                while (resultSet.next()) {
+                    if (user == null) {
+                        user = User.builder()
+                                .id(resultSet.getInt("id"))
+                                .username(resultSet.getString("username"))
+                                .password(resultSet.getString("password"))
+                                .speedLimit(resultSet.getInt("speed_limit"))
+                                .currentDirectory(resultSet.getString("working_dir"))
+                                .permissions(permissions)
+                                .build();
+                    }
+
+                    int permissionId = resultSet.getInt("permission_id");
+                    if (permissionId != 0) {
+                        Permission permission = new Permission();
+                        permission.setId(permissionId);
+                        permission.setPath(resultSet.getString("path"));
+                        permission.setRead(resultSet.getBoolean("read"));
+                        permission.setWrite(resultSet.getBoolean("write"));
+                        permission.setExecute(resultSet.getBoolean("execute"));
+                        permission.setUser(user);
+
+                        permissions.add(permission);
+                    }
                 }
+
+                return user;
             }
-        }
-    }
-
-    public static boolean createUser(String username, String password, String workingDir, int speedLimit) throws SQLException {
-        String sql = "INSERT INTO users (username, password, working_dir, speed_limit) VALUES (?, ?, ?, ?)";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, username);
-            statement.setString(2, password); // У реальній практиці не забувайте хешувати пароль
-            statement.setString(3, workingDir);
-            statement.setInt(4, speedLimit);
-
-            int rowsAffected = statement.executeUpdate();
-            return rowsAffected > 0; // Якщо рядок було додано успішно
-        }
-    }
-
-    public static boolean deleteUser(int userId) throws SQLException {
-        String sql = "DELETE FROM users WHERE id = ?";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, userId);
-
-            int rowsAffected = statement.executeUpdate();
-            return rowsAffected > 0; // Якщо рядок було видалено успішно
         }
     }
 }

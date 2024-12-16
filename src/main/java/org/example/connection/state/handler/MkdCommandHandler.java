@@ -1,5 +1,6 @@
 package org.example.connection.state.handler;
 
+import org.example.authentication.Permission;
 import org.example.connection.state.ConnectionContext;
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +13,10 @@ public class MkdCommandHandler extends AbstractCommandHandler {
     @Override
     protected boolean preconditions(String line) {
         newDir = new File(context.getCurrentDirectory()+ "/" + line.substring(4));
-        return !newDir.exists();
+        return !newDir.exists() && context.getUser()
+                .getPermissions().stream()
+                .filter(p -> context.getCurrentDirectory().startsWith(p.getPath()))
+                .anyMatch(Permission::isRead);
     }
 
     @Override

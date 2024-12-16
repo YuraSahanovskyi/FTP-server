@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Permission {
-    private Long id;
+    private Integer id;
     private String path;
     private boolean read;
     private boolean write;
