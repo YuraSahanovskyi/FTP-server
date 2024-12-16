@@ -47,4 +47,8 @@ public class StorCommandHandler extends AbstractCommandHandler {
         context.getOut().println("550 Failed to receive file.");
     }
 
+    @Override
+    public void accept(CommandVisitor visitor) {
+        visitor.visit(this);
+    }
 }

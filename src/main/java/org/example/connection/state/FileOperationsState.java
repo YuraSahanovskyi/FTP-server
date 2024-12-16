@@ -27,6 +27,7 @@ public class FileOperationsState implements ConnectionState {
         AbstractCommandHandler handler = commandHandlers.get(command);
         if (handler != null) {
             handler.handle(line);
+            handler.accept(new LoggingVisitor());
         } else {
             context.getOut().println("502 Command not implemented");
         }

@@ -45,4 +45,8 @@ public class ListCommandHandler extends AbstractCommandHandler {
         context.getOut().println("550 Failed to list directory.");
     }
 
+    @Override
+    public void accept(CommandVisitor visitor) {
+        visitor.visit(this);
+    }
 }

@@ -53,5 +53,10 @@ public class RetrCommandHandler extends AbstractCommandHandler {
     protected void handleError(String line) {
         context.getOut().println("550 Failed to send file.");
     }
+
+    @Override
+    public void accept(CommandVisitor visitor) {
+        visitor.visit(this);
+    }
 }
 

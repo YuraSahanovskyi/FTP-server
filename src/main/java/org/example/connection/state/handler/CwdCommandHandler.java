@@ -44,4 +44,9 @@ public class CwdCommandHandler extends AbstractCommandHandler {
     protected void handleError(String line) {
         context.getOut().println("550 Failed to change directory.");
     }
+
+    @Override
+    public void accept(CommandVisitor visitor) {
+        visitor.visit(this);
+    }
 }

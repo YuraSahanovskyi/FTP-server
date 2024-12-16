@@ -43,4 +43,9 @@ public class DeleCommandHandler extends AbstractCommandHandler {
     protected void handleError(String line) {
         context.getOut().println("550 Failed to delete file/directory.");
     }
+
+    @Override
+    public void accept(CommandVisitor visitor) {
+        visitor.visit(this);
+    }
 }

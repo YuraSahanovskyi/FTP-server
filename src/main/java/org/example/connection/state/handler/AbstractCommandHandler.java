@@ -4,7 +4,7 @@ import org.example.connection.state.ConnectionContext;
 
 import java.io.IOException;
 
-public abstract class AbstractCommandHandler {
+public abstract class AbstractCommandHandler implements CommandHandler {
     protected final ConnectionContext context;
 
     protected AbstractCommandHandler(ConnectionContext context) {
@@ -29,4 +29,9 @@ public abstract class AbstractCommandHandler {
     }
     protected abstract void execute(String line) throws IOException;
     protected void handleError(String line) {}
+
+    @Override
+    public String getUsername() {
+        return context.getUser().getUsername();
+    }
 }

@@ -12,5 +12,10 @@ public class PwdCommandHandler extends AbstractCommandHandler {
     protected void execute(String line) {
         context.getOut().println("257 \"" + context.getCurrentDirectory() + "\" is the current directory");
     }
+
+    @Override
+    public void accept(CommandVisitor visitor) {
+        visitor.visit(this);
+    }
 }
 
