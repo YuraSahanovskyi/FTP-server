@@ -2,6 +2,7 @@ package org.example.connection.state.handler;
 
 import org.example.authentication.Permission;
 import org.example.connection.state.ConnectionContext;
+import org.example.connection.state.handler.limiter.ThrottledOutputStream;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -28,27 +29,46 @@ public class RetrCommandHandler extends AbstractCommandHandler {
     protected void execute(String line) throws IOException {
         String filename = line.substring(5).trim();  // отримуємо ім'я файлу з команди
         File file = new File(context.getCurrentDirectory(), filename);
-            if (!file.exists() || file.isDirectory()) {
-                context.getOut().println("550 File not found.");
-                return;
-            }
+        if (!file.exists() || file.isDirectory()) {
+            context.getOut().println("550 File not found.");
+            return;
+        }
 
-            context.getOut().println("150 Opening data connection for " + filename);
-            BufferedOutputStream dataOut = new BufferedOutputStream(context.getDataSocket().getOutputStream());
-            FileInputStream fileIn = new FileInputStream(file);
+        // Початковий час
+        long startTime = System.nanoTime();
 
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = fileIn.read(buffer)) != -1) {
-                dataOut.write(buffer, 0, bytesRead);
-            }
+        context.getOut().println("150 Opening data connection for " + filename);
 
-            dataOut.flush();
-            dataOut.close();
-            fileIn.close();
-            context.getDataSocket().close();
-            context.getOut().println("226 Transfer complete.");
+        BufferedOutputStream dataOut = new BufferedOutputStream(context.getDataSocket().getOutputStream());
+        FileInputStream fileIn = new FileInputStream(file);
+
+        // Використовуємо ThrottledOutputStream для обмеження швидкості
+        ThrottledOutputStream throttledDataOut = new ThrottledOutputStream(dataOut, context.getUser().getSpeedLimit());
+
+        byte[] buffer = new byte[4096];
+        int bytesRead;
+        long totalBytesSent = 0;
+
+        while ((bytesRead = fileIn.read(buffer)) != -1) {
+            throttledDataOut.write(buffer, 0, bytesRead);
+            totalBytesSent += bytesRead;
+        }
+
+        throttledDataOut.flush();
+        throttledDataOut.close();
+        fileIn.close();
+        context.getDataSocket().close();
+
+        // Обчислення часу та швидкості
+        long endTime = System.nanoTime();
+        long durationInNanoSeconds = endTime - startTime;
+        double durationInSeconds = durationInNanoSeconds / 1_000_000_000.0;
+        double speedInBytesPerSecond = totalBytesSent / durationInSeconds;
+
+        // Виведення результату
+        context.getOut().println(String.format("226 Transfer complete. Time: %.2f seconds, Speed: %.2f bytes/sec.", durationInSeconds, speedInBytesPerSecond));
     }
+
     @Override
     protected void handleError(String line) {
         context.getOut().println("550 Failed to send file.");
@@ -59,4 +79,3 @@ public class RetrCommandHandler extends AbstractCommandHandler {
         visitor.visit(this);
     }
 }
-
