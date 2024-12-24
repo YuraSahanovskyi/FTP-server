@@ -6,12 +6,14 @@ import java.io.InputStream;
 public class ThrottledInputStream extends InputStream {
     private final InputStream inputStream;
     private final int userSpeedLimit;
+    private final int globalSpeedLimit;
     private long bytesRead = 0;
     private final long startTime = System.nanoTime();
 
-    public ThrottledInputStream(InputStream inputStream, int userSpeedLimit) {
+    public ThrottledInputStream(InputStream inputStream, int userSpeedLimit, int globalSpeedLimit) {
         this.inputStream = inputStream;
         this.userSpeedLimit = userSpeedLimit;
+        this.globalSpeedLimit = globalSpeedLimit;
     }
 
     @Override
@@ -27,7 +29,7 @@ public class ThrottledInputStream extends InputStream {
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
         throttle();
-        int bytesToRead = Math.min(len, userSpeedLimit);
+        int bytesToRead = Math.min(len, Math.min(userSpeedLimit, globalSpeedLimit));
         int bytesReadNow = inputStream.read(b, off, bytesToRead);
         if (bytesReadNow != -1) {
             bytesRead += bytesReadNow;
@@ -37,7 +39,7 @@ public class ThrottledInputStream extends InputStream {
 
     private void throttle() throws IOException {
         long elapsedTime = System.nanoTime() - startTime;
-        long expectedTime = (bytesRead * 1_000_000_000L) / userSpeedLimit;
+        long expectedTime = (bytesRead * 1_000_000_000L) / Math.min(userSpeedLimit, globalSpeedLimit);
 
         if (expectedTime > elapsedTime) {
             long sleepTime = (expectedTime - elapsedTime) / 1_000_000L;
@@ -54,3 +56,4 @@ public class ThrottledInputStream extends InputStream {
         inputStream.close();
     }
 }
+

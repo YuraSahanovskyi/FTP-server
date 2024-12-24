@@ -10,6 +10,7 @@ public class ConnectionContextBuilder implements Builder {
     private  PrintWriter out;
     private  BufferedReader in;
     private  Socket clientSocket;
+    private int globalSpeedLimit;
     @Override
     public void setClientSocket(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -25,7 +26,12 @@ public class ConnectionContextBuilder implements Builder {
         this.out = printWriter;
     }
 
+    @Override
+    public void setGlobalSpeedLimit(int globalSpeedLimit) {
+        this.globalSpeedLimit = globalSpeedLimit;
+    }
+
     public ConnectionContext build() {
-        return new ConnectionContext(clientSocket, in, out);
+        return new ConnectionContext(clientSocket, in, out, globalSpeedLimit);
     }
 }

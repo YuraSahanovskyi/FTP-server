@@ -19,7 +19,7 @@ public class ConnectionHandler implements Runnable {
         try {
             ConnectionContextBuilder builder = new ConnectionContextBuilder();
             Director director = new Director();
-            director.buildConnectionContext(builder, clientSocket);
+            director.buildConnectionContext(builder, clientSocket, 500);
             connectionContext = builder.build();
             connectionContext.start();
         } catch (IOException e) {

@@ -34,7 +34,7 @@ public class StorCommandHandler extends AbstractCommandHandler {
 
         BufferedInputStream dataIn = new BufferedInputStream(context.getDataSocket().getInputStream());
         FileOutputStream fileOut = new FileOutputStream(new File(context.getCurrentDirectory(), filename));
-        ThrottledInputStream throttledDataIn = new ThrottledInputStream(dataIn, context.getUser().getSpeedLimit());
+        ThrottledInputStream throttledDataIn = new ThrottledInputStream(dataIn, context.getUser().getSpeedLimit(), context.getGlobalSpeedLimit());
 
         byte[] buffer = new byte[4096];
         int bytesRead;

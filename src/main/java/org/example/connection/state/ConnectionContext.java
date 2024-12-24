@@ -31,12 +31,15 @@ public class ConnectionContext {
     private Socket dataSocket;
     @Getter
     private final Socket clientSocket;
+    @Getter
+    private final int globalSpeedLimit;
     static Map<String, UserMemento> history = new HashMap<>();
 
-    public ConnectionContext(Socket clientSocket, BufferedReader in, PrintWriter out) {
+    public ConnectionContext(Socket clientSocket, BufferedReader in, PrintWriter out, int globalSpeedLimit) {
         this.clientSocket = clientSocket;
         this.in = in;
         this.out = out;
+        this.globalSpeedLimit = globalSpeedLimit;
         this.state = new UnauthenticatedState(this);
     }
 

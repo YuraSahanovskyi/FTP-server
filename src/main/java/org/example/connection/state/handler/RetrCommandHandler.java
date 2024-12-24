@@ -43,7 +43,7 @@ public class RetrCommandHandler extends AbstractCommandHandler {
         FileInputStream fileIn = new FileInputStream(file);
 
         // Використовуємо ThrottledOutputStream для обмеження швидкості
-        ThrottledOutputStream throttledDataOut = new ThrottledOutputStream(dataOut, context.getUser().getSpeedLimit());
+        ThrottledOutputStream throttledDataOut = new ThrottledOutputStream(dataOut, context.getUser().getSpeedLimit(), context.getGlobalSpeedLimit());
 
         byte[] buffer = new byte[4096];
         int bytesRead;

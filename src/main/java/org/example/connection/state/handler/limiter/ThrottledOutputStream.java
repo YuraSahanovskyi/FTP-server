@@ -5,37 +5,37 @@ import java.io.OutputStream;
 
 public class ThrottledOutputStream extends OutputStream {
     private final OutputStream outputStream;
-    private final int userSpeedLimit; // обмеження швидкості в байтах на секунду
+    private final int userSpeedLimit;
+    private final int globalSpeedLimit;
     private long bytesWritten = 0;
     private final long startTime = System.nanoTime();
 
-    public ThrottledOutputStream(OutputStream outputStream, int userSpeedLimit) {
+    public ThrottledOutputStream(OutputStream outputStream, int userSpeedLimit, int globalSpeedLimit) {
         this.outputStream = outputStream;
         this.userSpeedLimit = userSpeedLimit;
+        this.globalSpeedLimit = globalSpeedLimit;
     }
 
     @Override
     public void write(int b) throws IOException {
-        throttle(1); // одна операція запису
+        throttle();
         outputStream.write(b);
         bytesWritten++;
     }
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        throttle(len); // кількість байт, яку будемо записувати
+        throttle();
         outputStream.write(b, off, len);
         bytesWritten += len;
     }
 
-    // Функція для контролю швидкості
-    private void throttle(int len) throws IOException {
+    private void throttle() throws IOException {
         long elapsedTime = System.nanoTime() - startTime;
-        long expectedTime = ((bytesWritten + len) * 1_000_000_000L) / userSpeedLimit; // очікуваний час для запису всіх байт
+        long expectedTime = (bytesWritten * 1_000_000_000L) / Math.min(userSpeedLimit, globalSpeedLimit);
 
-        // Якщо не досягнута потрібна швидкість, додаємо затримку
         if (elapsedTime < expectedTime) {
-            long sleepTime = (expectedTime - elapsedTime) / 1_000_000L; // перерва між записами в мілісекундах
+            long sleepTime = (expectedTime - elapsedTime) / 1_000_000L;
             try {
                 Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
@@ -49,3 +49,4 @@ public class ThrottledOutputStream extends OutputStream {
         outputStream.close();
     }
 }
+
