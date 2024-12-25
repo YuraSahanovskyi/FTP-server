@@ -1,4 +1,6 @@
-package org.example.connection.state.handler;
+package org.example.connection.state.handler.logging;
+
+import org.example.connection.state.handler.*;
 
 public interface CommandVisitor {
     void visit(CwdCommandHandler handler);

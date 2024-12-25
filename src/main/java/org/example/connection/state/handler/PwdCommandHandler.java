@@ -1,6 +1,7 @@
 package org.example.connection.state.handler;
 
 import org.example.connection.state.ConnectionContext;
+import org.example.connection.state.handler.logging.CommandVisitor;
 
 public class PwdCommandHandler extends AbstractCommandHandler {
 

@@ -3,6 +3,7 @@ package org.example.connection.state.handler;
 import org.example.authentication.Permission;
 import org.example.connection.state.ConnectionContext;
 import org.example.connection.state.handler.limiter.ThrottledInputStream;
+import org.example.connection.state.handler.logging.CommandVisitor;
 
 import java.io.BufferedInputStream;
 import java.io.File;
