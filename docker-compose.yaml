@@ -15,6 +15,9 @@ services:
       - DATABASE_NAME=ftp_server
       - DATABASE_USER=ftp_user
       - DATABASE_PASSWORD=ftp_password
+      - CONTROL_PORT=2121
+      - DATA_PORT=2020
+      - GLOBAL_SPEED_LIMIT=1500
     depends_on:
       - database
 

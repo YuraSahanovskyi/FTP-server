@@ -11,6 +11,7 @@ public class ConnectionContextBuilder implements Builder {
     private  BufferedReader in;
     private  Socket clientSocket;
     private int globalSpeedLimit;
+    private int dataPort;
     @Override
     public void setClientSocket(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -31,7 +32,12 @@ public class ConnectionContextBuilder implements Builder {
         this.globalSpeedLimit = globalSpeedLimit;
     }
 
+    @Override
+    public void setDataPort(int dataPort) {
+        this.dataPort = dataPort;
+    }
+
     public ConnectionContext build() {
-        return new ConnectionContext(clientSocket, in, out, globalSpeedLimit);
+        return new ConnectionContext(clientSocket, in, out, globalSpeedLimit, dataPort);
     }
 }

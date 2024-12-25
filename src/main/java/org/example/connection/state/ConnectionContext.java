@@ -33,13 +33,16 @@ public class ConnectionContext {
     private final Socket clientSocket;
     @Getter
     private final int globalSpeedLimit;
+    @Getter
+    private final int dataPort;
     static Map<String, UserMemento> history = new HashMap<>();
 
-    public ConnectionContext(Socket clientSocket, BufferedReader in, PrintWriter out, int globalSpeedLimit) {
+    public ConnectionContext(Socket clientSocket, BufferedReader in, PrintWriter out, int globalSpeedLimit, int dataPort) {
         this.clientSocket = clientSocket;
         this.in = in;
         this.out = out;
         this.globalSpeedLimit = globalSpeedLimit;
+        this.dataPort = dataPort;
         this.state = new UnauthenticatedState(this);
     }
 

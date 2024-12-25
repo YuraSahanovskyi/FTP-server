@@ -15,7 +15,7 @@ class WaitingCommandState implements ConnectionState {
         if (context.getDataServerSocket() != null) {
             context.getDataServerSocket().close();
         }
-        context.setDataServerSocket(new ServerSocket(2020));
+        context.setDataServerSocket(new ServerSocket(context.getDataPort()));
         int port = context.getDataServerSocket().getLocalPort();
         int p1 = port / 256;
         int p2 = port % 256;

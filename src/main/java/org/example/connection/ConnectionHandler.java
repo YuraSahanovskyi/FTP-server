@@ -8,10 +8,14 @@ import java.net.Socket;
 
 public class ConnectionHandler implements Runnable {
     private final Socket clientSocket;
+    private final int dataPort;
+    private final int globalSpeedLimit;
     private ConnectionContext connectionContext;
 
-    public ConnectionHandler(Socket socket) {
+    public ConnectionHandler(Socket socket, int dataPort, int globalSpeedLimit) {
         this.clientSocket = socket;
+        this.dataPort = dataPort;
+        this.globalSpeedLimit = globalSpeedLimit;
     }
 
     @Override
@@ -19,7 +23,7 @@ public class ConnectionHandler implements Runnable {
         try {
             ConnectionContextBuilder builder = new ConnectionContextBuilder();
             Director director = new Director();
-            director.buildConnectionContext(builder, clientSocket, 500);
+            director.buildConnectionContext(builder, clientSocket, globalSpeedLimit, dataPort);
             connectionContext = builder.build();
             connectionContext.start();
         } catch (IOException e) {

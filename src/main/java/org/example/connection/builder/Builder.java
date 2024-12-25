@@ -9,4 +9,5 @@ public interface Builder {
     void setBufferedReader(BufferedReader bufferedReader);
     void setPrintWriter(PrintWriter printWriter);
     void setGlobalSpeedLimit(int globalSpeedLimit);
+    void setDataPort(int dataPort);
 }
