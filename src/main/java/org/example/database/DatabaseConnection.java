@@ -1,4 +1,4 @@
-package org.example.authentication.database;
+package org.example.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

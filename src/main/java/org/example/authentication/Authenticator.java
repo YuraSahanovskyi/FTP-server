@@ -1,6 +1,6 @@
 package org.example.authentication;
 
-import org.example.authentication.database.UserRepository;
+import org.example.database.UserRepository;
 
 import java.io.BufferedReader;
 import java.io.IOException;

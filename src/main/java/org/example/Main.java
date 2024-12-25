@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.authentication.database.DatabaseConnection;
+import org.example.database.DatabaseConnection;
 import org.example.connection.ConnectionHandler;
 
 import java.io.*;

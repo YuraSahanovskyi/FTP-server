@@ -1,4 +1,4 @@
-package org.example.authentication.database;
+package org.example.database;
 
 import org.example.authentication.Permission;
 import org.example.authentication.User;
