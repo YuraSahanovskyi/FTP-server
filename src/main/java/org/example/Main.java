@@ -9,16 +9,19 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
-    private static final int THREAD_POOL_SIZE = 10;
+    private static final AtomicInteger activeConnections = new AtomicInteger(0);
 
     @SuppressWarnings("InfiniteLoopStatement")
     public static void main(String[] args) {
-        ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
         int controlPort = getIntEnv("CONTROL_PORT");
         int dataPort = getIntEnv("DATA_PORT");
         int globalSpeedLimit = getIntEnv("GLOBAL_SPEED_LIMIT");
+        int maxConnections = getIntEnv("MAX_CONNECTIONS");
+        int treadPoolSize = getIntEnv("THREAD_POOL_SIZE");
+        ExecutorService threadPool = Executors.newFixedThreadPool(treadPoolSize);
 
         try {
             Connection connection = DatabaseConnection.getConnection();
@@ -32,7 +35,14 @@ public class Main {
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                threadPool.submit(new ConnectionHandler(clientSocket, dataPort, globalSpeedLimit));
+
+                if (activeConnections.get() < maxConnections) {
+                    activeConnections.incrementAndGet();
+                    threadPool.submit(new ConnectionHandler(clientSocket, dataPort, globalSpeedLimit, activeConnections));
+                } else {
+                    System.out.println("Max connections reached. Rejecting new connection from " + clientSocket.getRemoteSocketAddress());
+                    clientSocket.close();
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

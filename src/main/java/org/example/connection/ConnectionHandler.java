@@ -8,17 +8,20 @@ import org.example.database.ConnectionStatsRepository;
 import java.io.IOException;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ConnectionHandler implements Runnable {
     private final Socket clientSocket;
     private final int dataPort;
     private final int globalSpeedLimit;
+    private final AtomicInteger activeConnections;
     private ConnectionContext connectionContext;
 
-    public ConnectionHandler(Socket socket, int dataPort, int globalSpeedLimit) {
+    public ConnectionHandler(Socket socket, int dataPort, int globalSpeedLimit, AtomicInteger activeConnections) {
         this.clientSocket = socket;
         this.dataPort = dataPort;
         this.globalSpeedLimit = globalSpeedLimit;
+        this.activeConnections = activeConnections;
     }
 
     @Override
@@ -32,6 +35,7 @@ public class ConnectionHandler implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+            activeConnections.decrementAndGet();
             try {
                 connectionContext.closeDataSockets();
                 ConnectionStatsRepository.saveConnectionInfo(connectionContext.getConnectionInfo());

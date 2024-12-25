@@ -18,6 +18,8 @@ services:
       - CONTROL_PORT=2121
       - DATA_PORT=2020
       - GLOBAL_SPEED_LIMIT=1500
+      - MAX_CONNECTIONS=3
+      - THREAD_POOL_SIZE=3
     depends_on:
       - database
 
