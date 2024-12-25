@@ -49,6 +49,7 @@ class WaitingCommandState implements ConnectionState {
                 context.handleCommand(line);
                 break;
             case "QUIT":
+                context.getConnectionInfo().endConnection();
                 context.getOut().println("221 Service closing control connection");
                 break;
             default:

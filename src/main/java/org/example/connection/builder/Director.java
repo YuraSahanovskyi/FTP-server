@@ -1,5 +1,7 @@
 package org.example.connection.builder;
 
+import org.example.connection.stats.ConnectionInfo;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,5 +17,6 @@ public class Director {
         builder.setPrintWriter(out);
         builder.setGlobalSpeedLimit(globalSpeedLimit);
         builder.setDataPort(dataPort);
+        builder.setConnectionInfo(new ConnectionInfo());
     }
 }

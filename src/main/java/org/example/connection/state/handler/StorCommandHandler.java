@@ -50,6 +50,8 @@ public class StorCommandHandler extends AbstractCommandHandler {
         throttledDataIn.close();
         context.getDataSocket().close();
 
+        context.getConnectionInfo().addBytesReceived(totalBytesRead);
+
         long endTime = System.nanoTime();
         long durationInNanoSeconds = endTime - startTime;
         double durationInSeconds = durationInNanoSeconds / 1_000_000_000.0;

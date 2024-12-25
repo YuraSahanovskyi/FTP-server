@@ -3,8 +3,11 @@ package org.example.connection;
 import org.example.connection.state.ConnectionContext;
 import org.example.connection.builder.ConnectionContextBuilder;
 import org.example.connection.builder.Director;
+import org.example.database.ConnectionStatsRepository;
+
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLException;
 
 public class ConnectionHandler implements Runnable {
     private final Socket clientSocket;
@@ -31,8 +34,10 @@ public class ConnectionHandler implements Runnable {
         } finally {
             try {
                 connectionContext.closeDataSockets();
+                ConnectionStatsRepository.saveConnectionInfo(connectionContext.getConnectionInfo());
+                System.out.println(connectionContext.getConnectionInfo());
                 clientSocket.close();
-            } catch (IOException e) {
+            } catch (IOException | SQLException e) {
                 e.printStackTrace();
             }
         }

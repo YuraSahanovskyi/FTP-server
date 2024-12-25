@@ -35,7 +35,6 @@ public class RetrCommandHandler extends AbstractCommandHandler {
             return;
         }
 
-        // Початковий час
         long startTime = System.nanoTime();
 
         context.getOut().println("150 Opening data connection for " + filename);
@@ -43,7 +42,6 @@ public class RetrCommandHandler extends AbstractCommandHandler {
         BufferedOutputStream dataOut = new BufferedOutputStream(context.getDataSocket().getOutputStream());
         FileInputStream fileIn = new FileInputStream(file);
 
-        // Використовуємо ThrottledOutputStream для обмеження швидкості
         ThrottledOutputStream throttledDataOut = new ThrottledOutputStream(dataOut, context.getUser().getSpeedLimit(), context.getGlobalSpeedLimit());
 
         byte[] buffer = new byte[4096];
@@ -60,13 +58,13 @@ public class RetrCommandHandler extends AbstractCommandHandler {
         fileIn.close();
         context.getDataSocket().close();
 
-        // Обчислення часу та швидкості
+        context.getConnectionInfo().addBytesSent(totalBytesSent);
+
         long endTime = System.nanoTime();
         long durationInNanoSeconds = endTime - startTime;
         double durationInSeconds = durationInNanoSeconds / 1_000_000_000.0;
         double speedInBytesPerSecond = totalBytesSent / durationInSeconds;
 
-        // Виведення результату
         context.getOut().println(String.format("226 Transfer complete. Time: %.2f seconds, Speed: %.2f bytes/sec.", durationInSeconds, speedInBytesPerSecond));
     }
 

@@ -15,6 +15,15 @@ CREATE TABLE permissions (
     execute BOOLEAN DEFAULT FALSE
 );
 
+CREATE TABLE connection_stats (
+    id SERIAL PRIMARY KEY,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP,
+    bytes_sent BIGINT NOT NULL,
+    bytes_received BIGINT NOT NULL
+);
+
+
 INSERT INTO users (username, password, working_dir, speed_limit)
 VALUES('ftp_user', 'ftp_password', '/app/data/ftp_user', 1000);
 

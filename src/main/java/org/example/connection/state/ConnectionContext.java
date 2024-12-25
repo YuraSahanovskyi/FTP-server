@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.authentication.User;
 import org.example.authentication.UserMemento;
+import org.example.connection.stats.ConnectionInfo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,14 +36,17 @@ public class ConnectionContext {
     private final int globalSpeedLimit;
     @Getter
     private final int dataPort;
+    @Getter
+    private final ConnectionInfo connectionInfo;
     static Map<String, UserMemento> history = new HashMap<>();
 
-    public ConnectionContext(Socket clientSocket, BufferedReader in, PrintWriter out, int globalSpeedLimit, int dataPort) {
+    public ConnectionContext(Socket clientSocket, BufferedReader in, PrintWriter out, int globalSpeedLimit, int dataPort, ConnectionInfo connectionInfo) {
         this.clientSocket = clientSocket;
         this.in = in;
         this.out = out;
         this.globalSpeedLimit = globalSpeedLimit;
         this.dataPort = dataPort;
+        this.connectionInfo = connectionInfo;
         this.state = new UnauthenticatedState(this);
     }
 
