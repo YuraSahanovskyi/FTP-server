@@ -18,21 +18,21 @@ public class ThrottledOutputStream extends OutputStream {
 
     @Override
     public void write(int b) throws IOException {
-        throttle();
+        throttle(1);
         outputStream.write(b);
         bytesWritten++;
     }
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        throttle();
+        throttle(len);
         outputStream.write(b, off, len);
         bytesWritten += len;
     }
 
-    private void throttle() throws IOException {
+    private void throttle(long bytesToWrite) throws IOException {
         long elapsedTime = System.nanoTime() - startTime;
-        long expectedTime = (bytesWritten * 1_000_000_000L) / Math.min(userSpeedLimit, globalSpeedLimit);
+        long expectedTime = ((bytesWritten + bytesToWrite) * 1_000_000_000L) / Math.min(userSpeedLimit, globalSpeedLimit);
 
         if (elapsedTime < expectedTime) {
             long sleepTime = (expectedTime - elapsedTime) / 1_000_000L;
@@ -49,4 +49,3 @@ public class ThrottledOutputStream extends OutputStream {
         outputStream.close();
     }
 }
-
